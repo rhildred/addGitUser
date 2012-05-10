@@ -91,11 +91,9 @@ ln -s /home/$1/rails_apps/$1/post-receive /home/$1/git/$1/hooks/post-receive
 
 # set the rest of teh userdir permissions
 chmod 755 /home/$1/public_html
-chmod 755 /home/$1/rails_apps/$1/public/scripts/hello.cgi
 chmod 755 /home/$1/rails_apps/$1/public/scripts/git.cgi
 
 # try to make the script executable in selinux (this failed)
-#chcon -R -h -t httpd_sys_script_exec_t /home/$1/rails_apps/$1/public/scripts/hello.cgi
 #chcon -R -h -t httpd_sys_script_exec_t /home/$1/rails_apps/$1/public/scripts/git.cgi
 
 # clean up tmp directory and make user the owner if setuid is being used, otherwise apache

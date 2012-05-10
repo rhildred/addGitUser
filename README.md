@@ -5,7 +5,7 @@ add a user that can only access the server resources in their home directory thr
 
 to run:
 
-curl | bash -s stable <username>
+curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s <username>
 
 started with:
 
@@ -16,30 +16,30 @@ ran yum install git
 
 in detail:
 
-# setup user that can't login so that they can't make any changes "manually"
+* setup user that can't login so that they can't make any changes "manually"
 
-# apache userdir permissions
+* apache userdir permissions
 
-# make basic directories git and rails_apps ... also a tmp directory that we will delete
+* make basic directories git and rails_apps ... also a tmp directory that we will delete
 
-# make the bare first repo
+* make the bare first repo
 
-# clone working copy in to tmp
+* clone working copy in to tmp
 
-# write the post-receive hook
+* write the post-receive hook
 
-# make the .htaccess with the security and the rewrite rule 
+* make the .htaccess with the security and the rewrite rule 
 
-# make the .htaccess to run our script
+* make the .htaccess to run our script
 
-# make our script
+* make our script
 
-# commit everything and check out into the rails_apps work tree
+* commit everything and check out into the rails_apps work tree
 
-# link in to work tree
+* link in to work tree
 
-# set the rest of the userdir permissions
+* set the rest of the userdir permissions
 
-# try to make the script executable in selinux (this failed)
+* try to make the script executable in selinux (this failed)
 
-# clean up tmp directory and make user the owner if setuid is being used, otherwise apache
+* clean up tmp directory and make user the owner if setuid is being used, otherwise apache
