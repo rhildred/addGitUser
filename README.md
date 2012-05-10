@@ -5,14 +5,16 @@ add a user that can only access the server resources in their home directory thr
 
 to run:
 
-curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s <username>
+curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s username
 
 started with:
 
-centos 6.2 network install + web server (http://mirror.centos.org/centos/6/os/x86_64/)
-added port 80 in /etc/sysconfig/iptables
-ran setsebool -P httpd_enable_homedirs true
-ran yum install git
+* centos 6.2 network install + web server (http://mirror.centos.org/centos/6/os/x86_64/)
+
+* added port 80 in /etc/sysconfig/iptables
+
+* ran setsebool -P httpd_enable_homedirs true
+* ran yum install git
 
 in detail:
 
