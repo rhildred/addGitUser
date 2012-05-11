@@ -5,22 +5,13 @@ add a user that can only access the server resources in their home directory thr
 
 to run:
 
-curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s username
+curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s
 
 started with:
 
-* centos 6.2 network install + web server (http://mirror.centos.org/centos/6/os/x86_64/)
-
-* added port 80 in /etc/sysconfig/iptables
-
-* ran setsebool -P httpd_enable_homedirs true
-* ran yum install git
+an account set up under cpanel that I can ssh to
 
 in detail:
-
-* setup user that can't login so that they can't make any changes "manually"
-
-* apache userdir permissions
 
 * make basic directories git and rails_apps ... also a tmp directory that we will delete
 
@@ -42,6 +33,4 @@ in detail:
 
 * set the rest of the userdir permissions
 
-* try to make the script executable in selinux (this failed)
-
-* clean up tmp directory and make user the owner if setuid is being used, otherwise apache
+* clean up tmp directory

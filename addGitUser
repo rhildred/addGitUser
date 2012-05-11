@@ -1,25 +1,18 @@
 #!/bin/bash
 
-# setup user that can't login so that they can't make any changes "manually"
-adduser $1 -s /sbin/nologin
-
-# apache userdir permissions
-chmod 711 /home/$1
-cd /home/$1
-
 # make basic directories git and rails_apps ... also a tmp directory that we will delete
 mkdir git
 mkdir rails_apps
-mkdir rails_apps/$1
+mkdir rails_apps/$LOGNAME
 mkdir tmp
 
 #make the bare first repo
-git init --bare ./git/$1
+git init --bare git/$LOGNAME
 
 # clone working copy in to tmp
 cd tmp
-git clone file:///`pwd`/../git/$1
-cd $1
+git clone file:///../git/$LOGNAME
+cd $LOGNAME
 
 # write the post-receive hook
 OUTFILE=post-receive
@@ -27,7 +20,7 @@ OUTFILE=post-receive
 cat <<EOFPRCV
 #!/bin/bash
 
-GIT_WORK_TREE=/home/$1/rails_apps/$1 git checkout -f
+GIT_WORK_TREE=~/rails_apps/$LOGNAME git checkout -f
 EOFPRCV
 ) > $OUTFILE
 chmod +x $OUTFILE
@@ -41,7 +34,7 @@ cat <<EOFHTA
 AuthType Digest
 AuthName "$sRealm"
 AuthDigestDomain /git/ 
-AuthUserFile /home/$1/rails_apps/$1/passwd_file
+AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
 Require valid-user
 RewriteEngine On
 RewriteBase /git
@@ -52,7 +45,7 @@ cat <<'EOFHT2'
 RewriteRule ^(.*)$ /scripts/git.cgi/$1
 EOFHT2
 ) >> public/git/.htaccess
-htdigest -c passwd_file "$sRealm" $1
+htdigest -c passwd_file "$sRealm" $LOGNAME
 
 # make the .htaccess to run our script
 mkdir public/scripts
@@ -62,20 +55,43 @@ Options +ExecCgi
 EOFHT2
 ) > public/scripts/.htaccess
 
+## we don't have a /usr/libexec/git-core ... we've got /usr/bin/git-http-backend
+## recommendation is as follows -- do a test to find git:
+## 
+GITPATH=$(which git-http-backend)
+if [ ! ${GITPATH} ] ; then
+  # We use "which" to see if git-http-backend is in our path
+  # The ${...} construct allows "test" (the code that is invoked by
+  # the "[...]" bracket pair) to accept a potentially null value
+  # If we are here, it means that our call to "which" found nothing. 
+  #
+  # So, we try setting GITPATH to a value that is potentially correct,
+  # but probably not on our path, and see if that works better...
+  GITPATH=/usr/libexec/git-core/git-http-backend
+  if [ ! -x $GITPATH ] ; then
+        # "-x" is a test that sees if a file exists, and is executable.
+	echo "!!!! git-http-backend does not appear to exist"
+	echo "!!!! setting public/scripts/git.cgi to a bogus value!"
+	GITPATH="BOGUS_GIT-HTTP-BACKEND_VALUE--Please_fix"
+  fi
+fi   
+##
+
+
 # make our script
 (
-cat <<EOFSH
+cat <<'EOFSH'
 #!/bin/sh
 #first we export the GIT_PROJECT_ROOT
-export GIT_PROJECT_ROOT=/home/$1/git/
+export GIT_PROJECT_ROOT=~/git/
 export GIT_HTTP_EXPORT_ALL=T
+export REMOTE_USER=$REDIRECT_REMOTE_USER
 EOFSH
 ) > public/scripts/git.cgi
 (
-cat <<'EOFSH2'
-export REMOTE_USER=$REDIRECT_REMOTE_USER
+cat <<EOFSH2
 #and run your git-http-backend
-/usr/libexec/git-core/git-http-backend
+$GITPATH
 EOFSH2
 ) >> public/scripts/git.cgi
 
@@ -83,21 +99,15 @@ EOFSH2
 git add .
 git commit -am "initial commit"
 git push origin master
-GIT_WORK_TREE=/home/$1/rails_apps/$1 git checkout -f
+GIT_WORK_TREE=~/rails_apps/$LOGNAME git checkout -f
 
 # link in to work tree
-ln -s /home/$1/rails_apps/$1/public /home/$1/public_html
-ln -s /home/$1/rails_apps/$1/post-receive /home/$1/git/$1/hooks/post-receive
+ln -s ~/rails_apps/$LOGNAME/public ~/public_html
+ln -s ~/rails_apps/$LOGNAME/post-receive ~/git/$LOGNAME/hooks/post-receive
 
-# set the rest of teh userdir permissions
-chmod 755 /home/$1/public_html
-chmod 755 /home/$1/rails_apps/$1/public/scripts/git.cgi
+# set the rest of the userdir permissions
+chmod 755 ~/public_html
+chmod 755 ~/rails_apps/$LOGNAME/public/scripts/git.cgi
 
-# try to make the script executable in selinux (this failed)
-#chcon -R -h -t httpd_sys_script_exec_t /home/$1/rails_apps/$1/public/scripts/git.cgi
-
-# clean up tmp directory and make user the owner if setuid is being used, otherwise apache
 cd ../..
-rm -rf tmp
-#chown -R $1:$1 *
-chown -R apache:apache *
+rm -rf ~/tmp
