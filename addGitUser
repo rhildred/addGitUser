@@ -11,7 +11,7 @@ git init --bare git/$LOGNAME
 
 # clone working copy in to tmp
 cd tmp
-git clone file:///../git/$LOGNAME
+git clone file:///`pwd`/../git/$LOGNAME
 cd $LOGNAME
 
 # write the post-receive hook
