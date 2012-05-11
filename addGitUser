@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# do git global config
+git config --global user.email "$LOGNAME@`hostname`"
+git config --global user.name "$LOGNAME"
+
 # make basic directories git and rails_apps ... also a tmp directory that we will delete
 mkdir git
 mkdir rails_apps
