@@ -102,12 +102,16 @@ git push origin master
 GIT_WORK_TREE=~/rails_apps/$LOGNAME git checkout -f
 
 # link in to work tree
+if [ -d ~/public_html ] ; then
+	mv ~/public_html ~/public_html_`date '+%F'`
+fi
+
 ln -s ~/rails_apps/$LOGNAME/public ~/public_html
 ln -s ~/rails_apps/$LOGNAME/post-receive ~/git/$LOGNAME/hooks/post-receive
 
 # set the rest of the userdir permissions
 chmod 755 ~/public_html
-chmod 755 ~/rails_apps/$LOGNAME/public/scripts/git.cgi
+chmod 755 ~/rails_apps/$1/public/scripts/git.cgi
 
 cd ../..
 rm -rf ~/tmp
