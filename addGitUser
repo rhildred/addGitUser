@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# get homedir 
+
+HOMEDIR = `pwd`
+
 # do git global config
 git config --global user.email "$LOGNAME@`hostname`"
 git config --global user.name "$LOGNAME"
@@ -15,7 +19,7 @@ git init --bare git/$LOGNAME
 
 # clone working copy in to tmp
 cd tmp
-git clone file:///`pwd`/../git/$LOGNAME
+git clone file:///$HOMEDIR/git/$LOGNAME
 cd $LOGNAME
 
 # write the post-receive hook
@@ -86,14 +90,15 @@ fi
 (
 cat <<'EOFSH'
 #!/bin/sh
-#first we export the GIT_PROJECT_ROOT
-export GIT_PROJECT_ROOT=~/git/
-export GIT_HTTP_EXPORT_ALL=T
+#first we export the user so that we don't get an error 22
 export REMOTE_USER=$REDIRECT_REMOTE_USER
 EOFSH
 ) > public/scripts/git.cgi
 (
 cat <<EOFSH2
+#then we export the GIT_PROJECT_ROOT
+export GIT_PROJECT_ROOT=$HOMEDIR/git/
+export GIT_HTTP_EXPORT_ALL=T
 #and run your git-http-backend
 $GITPATH
 EOFSH2
