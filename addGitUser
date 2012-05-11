@@ -37,7 +37,6 @@ sRealm='git repository'
 cat <<EOFHTA
 AuthType Digest
 AuthName "$sRealm"
-AuthDigestDomain /git/ 
 AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
 Require valid-user
 RewriteEngine On
