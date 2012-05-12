@@ -5,7 +5,7 @@ add a user that can only access the server resources in their home directory thr
 
 to run:
 
-  curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s
+    curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s
 
 started with:
 
