@@ -9,7 +9,7 @@ curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s
 
 started with:
 
-an account set up under cpanel that I can ssh to
+an account set up under cpanel that I can ssh to, mod_auth_digest installed and activated
 
 in detail:
 
