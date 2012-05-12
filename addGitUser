@@ -4,17 +4,17 @@
 git config --global user.email "$LOGNAME@`hostname`"
 git config --global user.name "$LOGNAME"
 
-# make basic directories git and rails_apps ... also a tmp directory that we will delete
+# make basic directories git and rails_apps ... also a tmp1 directory that we will delete
 mkdir git
 mkdir rails_apps
 mkdir rails_apps/$LOGNAME
-mkdir tmp
+mkdir tmp1
 
 #make the bare first repo
 git init --bare git/$LOGNAME
 
 # clone working copy in to tmp
-cd tmp
+cd tmp1
 git clone file:///$HOME/git/$LOGNAME
 cd $LOGNAME
 
@@ -123,4 +123,4 @@ chmod 755 ~/rails_apps/$LOGNAME/public/cgi-bin/git.cgi
 chmod 755 ~/rails_apps/$LOGNAME/public/cgi-bin/hello.cgi
 
 cd ../..
-rm -rf ~/tmp
+rm -rf ~/tmp1
