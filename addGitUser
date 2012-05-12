@@ -30,6 +30,7 @@ EOFPRCV
 chmod +x $OUTFILE
 mkdir public
 mkdir public/git
+mkdir public/cgi-bin
 
 # make the .htaccess with the security and the rewrite rule 
 sRealm='git repository'
@@ -45,18 +46,27 @@ EOFHTA
 ) > public/git/.htaccess
 (
 cat <<'EOFHT2'
-RewriteRule ^(.*)$ /scripts/git.cgi/$1
+RewriteRule ^(.*)$ /cgi-bin/git.cgi/$1
 EOFHT2
 ) >> public/git/.htaccess
 htdigest -c passwd_file "$sRealm" $LOGNAME
 
-# make the .htaccess to run our script
-mkdir public/scripts
 (
-cat <<EOFHT2
-Options +ExecCgi
-EOFHT2
-) > public/scripts/.htaccess
+cat <<EOFHLL
+#!/bin/sh
+echo "Content-type: text/html"
+echo ""
+
+# our html code
+echo "<html>"
+echo "<head><title>My FOX page</title></head>"
+echo "<body>"
+echo "<h1>Welcome to my FOX Board web page</h1>"
+echo "Hello World !"
+echo "</body>"
+echo "</html>"
+EOFHLL
+) > public/cgi-bin/hello.cgi
 
 ## we don't have a /usr/libexec/git-core ... we've got /usr/bin/git-http-backend
 ## recommendation is as follows -- do a test to find git:
@@ -74,7 +84,7 @@ if [ ! ${GITPATH} ] ; then
   if [ ! -x $GITPATH ] ; then
         # "-x" is a test that sees if a file exists, and is executable.
 	echo "!!!! git-http-backend does not appear to exist"
-	echo "!!!! setting public/scripts/git.cgi to a bogus value!"
+	echo "!!!! setting public/cgi-bin/git.cgi to a bogus value!"
 	GITPATH="BOGUS_GIT-HTTP-BACKEND_VALUE--Please_fix"
   fi
 fi   
@@ -88,7 +98,7 @@ cat <<'EOFSH'
 #first we export the user so that we don't get an error 22
 export REMOTE_USER=$REDIRECT_REMOTE_USER
 EOFSH
-) > public/scripts/git.cgi
+) > public/cgi-bin/git.cgi
 (
 cat <<EOFSH2
 #then we export the GIT_PROJECT_ROOT
@@ -97,7 +107,7 @@ export GIT_HTTP_EXPORT_ALL=T
 #and run your git-http-backend
 $GITPATH
 EOFSH2
-) >> public/scripts/git.cgi
+) >> public/cgi-bin/git.cgi
 
 # commit everything and check out into the rails_apps work tree
 git add .
@@ -115,7 +125,8 @@ ln -s ~/rails_apps/$LOGNAME/post-receive ~/git/$LOGNAME/hooks/post-receive
 
 # set the rest of the userdir permissions
 chmod 755 ~/public_html
-chmod 755 ~/rails_apps/$LOGNAME/public/scripts/git.cgi
+chmod 755 ~/rails_apps/$LOGNAME/public/cgi-bin/git.cgi
+chmod 755 ~/rails_apps/$LOGNAME/public/cgi-bin/hello.cgi
 
 cd ../..
 rm -rf ~/tmp
