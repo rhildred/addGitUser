@@ -38,6 +38,7 @@ sRealm='git repository'
 cat <<EOFHTA
 AuthType Digest
 AuthName "$sRealm"
+AuthDigestDomain /git/ 
 AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
 Require valid-user
 RewriteEngine On
@@ -52,21 +53,14 @@ EOFHT2
 htdigest -c passwd_file "$sRealm" $LOGNAME
 
 (
-cat <<EOFHLL
-#!/bin/sh
-echo "Content-type: text/html"
-echo ""
-
-# our html code
-echo "<html>"
-echo "<head><title>My FOX page</title></head>"
-echo "<body>"
-echo "<h1>Welcome to my FOX Board web page</h1>"
-echo "Hello World !"
-echo "</body>"
-echo "</html>"
-EOFHLL
-) > public/cgi-bin/hello.cgi
+cat <<EOFHT3
+AuthType Digest
+AuthName "$sRealm"
+AuthDigestDomain /cgi-bin/ 
+AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
+Require valid-user
+EOFHT3
+) > public/cgi-bin/.htaccess
 
 ## we don't have a /usr/libexec/git-core ... we've got /usr/bin/git-http-backend
 ## recommendation is as follows -- do a test to find git:
