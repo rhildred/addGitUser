@@ -13,11 +13,11 @@ an account set up under cpanel that I can ssh to, mod_auth_digest installed and 
 
 in detail:
 
-* make basic directories git and rails_apps ... also a tmp directory that we will delete
+* make basic directories git and rails_apps ... also a tmp1 directory that we will delete
 
 * make the bare first repo
 
-* clone working copy in to tmp
+* clone working copy in to tmp1
 
 * write the post-receive hook
 
@@ -27,10 +27,10 @@ in detail:
 
 * make our script
 
+* set the rest of the userdir permissions
+
 * commit everything and check out into the rails_apps work tree
 
 * link in to work tree
 
-* set the rest of the userdir permissions
-
-* clean up tmp directory
+* clean up tmp1 directory
