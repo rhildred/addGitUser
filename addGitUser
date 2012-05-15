@@ -89,8 +89,8 @@ fi
 (
 cat <<'EOFSH'
 #!/bin/sh
-#first we export the user so that we don't get an error 22
-export REMOTE_USER=$REDIRECT_REMOTE_USER
+#first we export the user so that we don't get an error 22 (actually REMOTE_USER is set correctly, because of digest authentication)
+#export REMOTE_USER=$REDIRECT_REMOTE_USER
 EOFSH
 ) > public/cgi-bin/git.cgi
 (
