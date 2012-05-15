@@ -88,6 +88,7 @@ fi
 # make our script
 (
 cat <<EOFSH2
+#!/bin/bash
 #first we export the GIT_PROJECT_ROOT
 export GIT_PROJECT_ROOT=$HOME/git/
 export GIT_HTTP_EXPORT_ALL=T
