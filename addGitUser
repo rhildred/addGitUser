@@ -87,21 +87,14 @@ fi
 
 # make our script
 (
-cat <<'EOFSH'
-#!/bin/sh
-#first we export the user so that we don't get an error 22 (actually REMOTE_USER is set correctly, because of digest authentication)
-#export REMOTE_USER=$REDIRECT_REMOTE_USER
-EOFSH
-) > public/cgi-bin/git.cgi
-(
 cat <<EOFSH2
-#then we export the GIT_PROJECT_ROOT
+#first we export the GIT_PROJECT_ROOT
 export GIT_PROJECT_ROOT=$HOME/git/
 export GIT_HTTP_EXPORT_ALL=T
 #and run your git-http-backend
 $GITPATH
 EOFSH2
-) >> public/cgi-bin/git.cgi
+) > public/cgi-bin/git.cgi
 
 # commit everything and check out into the rails_apps work tree
 git add .
