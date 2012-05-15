@@ -39,7 +39,7 @@ cat <<EOFHTA
 AuthType Digest
 AuthName "$sRealm"
 AuthDigestDomain /git/ 
-AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
+AuthUserFile $HOME/rails_apps/$LOGNAME/passwd_file
 Require valid-user
 RewriteEngine On
 RewriteBase /git
@@ -57,7 +57,7 @@ cat <<EOFHT3
 AuthType Digest
 AuthName "$sRealm"
 AuthDigestDomain /cgi-bin/ 
-AuthUserFile ~/rails_apps/$LOGNAME/passwd_file
+AuthUserFile $HOME/rails_apps/$LOGNAME/passwd_file
 Require valid-user
 EOFHT3
 ) > public/cgi-bin/.htaccess
