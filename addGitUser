@@ -97,6 +97,10 @@ $GITPATH
 EOFSH2
 ) > public/cgi-bin/git.cgi
 
+# set the rest of the userdir permissions
+chmod 755 public
+chmod 755 public/cgi-bin/git.cgi
+
 # commit everything and check out into the rails_apps work tree
 git add .
 git commit -am "initial commit"
@@ -110,10 +114,6 @@ fi
 
 ln -s ~/rails_apps/$LOGNAME/public ~/public_html
 ln -s ~/rails_apps/$LOGNAME/post-receive ~/git/$LOGNAME/hooks/post-receive
-
-# set the rest of the userdir permissions
-chmod 755 ~/public_html
-chmod 755 ~/rails_apps/$LOGNAME/public/cgi-bin/git.cgi
 
 cd ../..
 rm -rf ~/tmp1
