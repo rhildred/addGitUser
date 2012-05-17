@@ -1,0 +1,35 @@
+#!/bin/bash
+
+mkdir tmp1
+
+#make the bare first repo
+git init --bare git/$1
+
+# clone working copy in to tmp
+cd tmp
+git clone file:///$HOME/git/$1
+cd $1
+
+# write the post-receive hook
+OUTFILE=post-receive
+(
+cat <<EOFPRCV
+#!/bin/bash
+
+GIT_WORK_TREE=~/rails_apps/$1 git checkout -f
+EOFPRCV
+) > $OUTFILE
+chmod +x $OUTFILE
+# commit everything and check out into the rails_apps work tree
+git add .
+git commit -am "initial commit"
+git push origin master
+mkdir ~/rails_apps/$1
+GIT_WORK_TREE=~/rails_apps/$1 git checkout -f
+
+# link in to work tree
+ln -s ~/rails_apps/$1/post-receive ~/git/$1/hooks/post-receive
+
+cd ../..
+rm -rf ~/tmp1
+

@@ -7,6 +7,10 @@ to run:
 
     curl https://raw.github.com/rhildred/addGitUser/master/addGitUser | bash -s
 
+to create another repository under the same account:
+
+    curl https://raw.github.com/rhildred/addGitUser/master/addRepo | bash -s repositoryName
+
 started with:
 
 an account set up under cpanel that I can ssh to, mod_auth_digest installed and activated
