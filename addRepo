@@ -1,12 +1,12 @@
 #!/bin/bash
 
-mkdir tmp1
+mkdir ~/tmp1
 
 #make the bare first repo
 git init --bare git/$1
 
 # clone working copy in to tmp
-cd tmp
+cd ~/tmp1
 git clone file:///$HOME/git/$1
 cd $1
 
@@ -30,6 +30,6 @@ GIT_WORK_TREE=~/rails_apps/$1 git checkout -f
 # link in to work tree
 ln -s ~/rails_apps/$1/post-receive ~/git/$1/hooks/post-receive
 
-cd ../..
+cd ~/
 rm -rf ~/tmp1
 
